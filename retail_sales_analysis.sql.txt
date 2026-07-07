@@ -1,0 +1,99 @@
+-- =========================
+-- 1. DATABASE CREATE
+-- =========================
+CREATE DATABASE IF NOT EXISTS retail_db;
+USE retail_db;
+
+-- =========================
+-- 2. TABLE CREATE
+-- =========================
+CREATE TABLE IF NOT EXISTS retail_sales_dataset (
+    `Transaction ID` INT,
+    `Date` TEXT,
+    `Customer ID` TEXT,
+    `Gender` TEXT,
+    `Age` INT,
+    `Product Category` TEXT,
+    `Quantity` INT,
+    `Price per Unit` INT,
+    `Total Amount` INT
+);
+
+-- =========================
+-- 3. DATA CHECK
+-- =========================
+SELECT * FROM retail_sales_dataset LIMIT 10;
+
+SHOW TABLES;
+
+SELECT COUNT(*) AS total_rows
+FROM retail_sales_dataset;
+
+-- =========================
+-- 4. KPI ANALYSIS
+-- =========================
+SELECT SUM(`Total Amount`) AS total_revenue
+FROM retail_sales_dataset;
+
+SELECT AVG(`Total Amount`) AS avg_order_value
+FROM retail_sales_dataset;
+
+SELECT SUM(`Quantity`) AS total_quantity
+FROM retail_sales_dataset;
+
+-- =========================
+-- 5. CATEGORY ANALYSIS
+-- =========================
+SELECT `Product Category`,
+       SUM(`Total Amount`) AS total_sales
+FROM retail_sales_dataset
+GROUP BY `Product Category`
+ORDER BY total_sales DESC;
+
+SELECT `Product Category`,
+       SUM(`Quantity`) AS total_quantity
+FROM retail_sales_dataset
+GROUP BY `Product Category`
+ORDER BY total_quantity DESC;
+
+-- =========================
+-- 6. CUSTOMER ANALYSIS
+-- =========================
+SELECT `Customer ID`,
+       SUM(`Total Amount`) AS total_spent
+FROM retail_sales_dataset
+GROUP BY `Customer ID`
+ORDER BY total_spent DESC
+LIMIT 10;
+
+-- =========================
+-- 7. GENDER ANALYSIS
+-- =========================
+SELECT `Gender`,
+       SUM(`Total Amount`) AS total_spent
+FROM retail_sales_dataset
+GROUP BY `Gender`;
+
+-- =========================
+-- 8. TIME ANALYSIS
+-- =========================
+SELECT `Date`,
+       SUM(`Total Amount`) AS daily_sales
+FROM retail_sales_dataset
+GROUP BY `Date`
+ORDER BY `Date`;
+
+SELECT DATE_FORMAT(STR_TO_DATE(`Date`, '%Y-%m-%d'), '%Y-%m') AS month,
+       SUM(`Total Amount`) AS monthly_sales
+FROM retail_sales_dataset
+GROUP BY month
+ORDER BY month;
+
+-- =========================
+-- 9. FINAL INSIGHTS
+-- =========================
+SELECT `Product Category`,
+       SUM(`Total Amount`) AS revenue
+FROM retail_sales_dataset
+GROUP BY `Product Category`
+ORDER BY revenue DESC;
